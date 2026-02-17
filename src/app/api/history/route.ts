@@ -4,10 +4,15 @@ import { Analysis } from '@/lib/types';
 
 export async function GET(request: NextRequest) {
   try {
-    const { collection } = await getDatabase();
+    const db = await getDatabase();
+    
+    // MongoDB not available
+    if (!db) {
+      return NextResponse.json({ analyses: [], warning: 'Database not available' });
+    }
     
     // Get the last 50 analyses, sorted by date descending
-    const analyses = await collection
+    const analyses = await db.collection
       .find({})
       .sort({ createdAt: -1 })
       .limit(50)

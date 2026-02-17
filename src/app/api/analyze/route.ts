@@ -19,32 +19,40 @@ export async function POST(request: NextRequest) {
     // Analyze the code
     const { bugs, summary } = analyzeCode(code, language);
     
-    // Save to MongoDB
-    try {
-      const { collection } = await getDatabase();
-      
-      const analysis: Omit<Analysis, '_id'> = {
-        code,
-        language,
-        bugs,
-        summary,
-        createdAt: new Date(),
-      };
-      
-      const result = await collection.insertOne(analysis as Analysis);
-      
+    // Try to save to MongoDB, but don't fail if it's unavailable
+    const db = await getDatabase();
+    if (db) {
+      try {
+        const analysis: Omit<Analysis, '_id'> = {
+          code,
+          language,
+          bugs,
+          summary,
+          createdAt: new Date(),
+        };
+        
+        const result = await db.collection.insertOne(analysis as Analysis);
+        
+        return NextResponse.json({
+          id: result.insertedId,
+          bugs,
+          summary,
+        });
+      } catch (dbError) {
+        // If MongoDB insert fails, still return analysis results
+        console.warn('MongoDB insert failed, returning results without saving:', dbError);
+        return NextResponse.json({
+          bugs,
+          summary,
+          warning: 'Results not saved to database',
+        });
+      }
+    } else {
+      // MongoDB not available
       return NextResponse.json({
-        id: result.insertedId,
         bugs,
         summary,
-      });
-    } catch (dbError) {
-      // If MongoDB is not available, still return analysis results
-      console.warn('MongoDB not available, returning results without saving:', dbError);
-      return NextResponse.json({
-        bugs,
-        summary,
-        warning: 'Results not saved to database',
+        warning: 'Database not available. Results not saved.',
       });
     }
   } catch (error) {

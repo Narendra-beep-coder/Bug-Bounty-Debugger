@@ -12,7 +12,12 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const { collection } = await getDatabase();
+    const db = await getDatabase();
+    
+    // MongoDB not available
+    if (!db) {
+      return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    }
     
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
@@ -22,7 +27,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
     
-    const analysis = await collection.findOne({ _id: id as unknown as Analysis['_id'] });
+    const analysis = await db.collection.findOne({ _id: id as unknown as Analysis['_id'] });
     
     if (!analysis) {
       return NextResponse.json(
@@ -44,7 +49,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const { collection } = await getDatabase();
+    const db = await getDatabase();
+    
+    // MongoDB not available
+    if (!db) {
+      return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    }
     
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
@@ -54,7 +64,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
     
-    const result = await collection.deleteOne({ _id: id as unknown as Analysis['_id'] });
+    const result = await db.collection.deleteOne({ _id: id as unknown as Analysis['_id'] });
     
     if (result.deletedCount === 0) {
       return NextResponse.json(

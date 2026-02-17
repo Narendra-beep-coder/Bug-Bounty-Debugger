@@ -7,11 +7,27 @@ const COLLECTION_NAME = 'analyses';
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
+let connectionError: Error | null = null;
+let isConnecting = false;
 
-export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db; collection: Collection<Analysis> }> {
+export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db; collection: Collection<Analysis> } | null> {
+  // Return cached error if MongoDB was previously unavailable
+  if (connectionError) {
+    console.warn('MongoDB previously failed to connect, skipping retry:', connectionError.message);
+    return null;
+  }
+
+  // Return existing connection if available
   if (client && db) {
     return { client, db, collection: db.collection<Analysis>(COLLECTION_NAME) };
   }
+
+  // Prevent multiple concurrent connection attempts
+  if (isConnecting) {
+    return null;
+  }
+
+  isConnecting = true;
 
   try {
     client = new MongoClient(MONGODB_URI);
@@ -22,14 +38,17 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     await db.collection<Analysis>(COLLECTION_NAME).createIndex({ createdAt: -1 });
     
     console.log('Connected to MongoDB');
+    isConnecting = false;
     return { client, db, collection: db.collection<Analysis>(COLLECTION_NAME) };
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    throw error;
+    connectionError = error as Error;
+    isConnecting = false;
+    return null;
   }
 }
 
-export async function getDatabase(): Promise<{ client: MongoClient; db: Db; collection: Collection<Analysis> }> {
+export async function getDatabase(): Promise<{ client: MongoClient; db: Db; collection: Collection<Analysis> } | null> {
   return connectToDatabase();
 }
 
@@ -38,6 +57,11 @@ export async function closeDatabase(): Promise<void> {
     await client.close();
     client = null;
     db = null;
+    connectionError = null;
     console.log('MongoDB connection closed');
   }
+}
+
+export function isDatabaseAvailable(): boolean {
+  return connectionError === null && client !== null;
 }
