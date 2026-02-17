@@ -62,9 +62,10 @@ The bug bounty debugger supports analyzing code in:
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-02-17 | Implemented BugHunter - full multi-language bug detector |
+| 2026-02-17 | Fixed MongoDB stability - app now works without MongoDB |
 
 ## To Run
 
-1. Ensure MongoDB is running locally or set MONGODB_URI
-2. Run `bun next dev` to start the development server
-3. Open http://localhost:3000
+1. Run `bun next dev` to start the development server
+2. Open http://localhost:3000
+3. MongoDB is optional - app works without it (history won't persist)
