@@ -17,9 +17,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ analyses });
   } catch (error) {
     console.error('Failed to fetch history:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch history', analyses: [] },
-      { status: 500 }
-    );
+    // Return empty array if MongoDB is not available
+    return NextResponse.json({ analyses: [], warning: 'Database not available' });
   }
 }

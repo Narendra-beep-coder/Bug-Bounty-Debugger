@@ -22,8 +22,14 @@ export function History({ onSelectAnalysis, refreshTrigger }: HistoryProps) {
       setLoading(true);
       const response = await fetch('/api/history');
       const data = await response.json();
-      setAnalyses(data.analyses || []);
-      setError(null);
+      
+      if (data.warning) {
+        setError('Database not available. Start MongoDB to enable history.');
+        setAnalyses([]);
+      } else {
+        setAnalyses(data.analyses || []);
+        setError(null);
+      }
     } catch (err) {
       setError('Failed to load history');
       console.error(err);
