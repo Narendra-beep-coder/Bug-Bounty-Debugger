@@ -5,6 +5,7 @@ import { Bug, Summary } from '@/lib/types';
 import { CodeEditor } from './components/CodeEditor';
 import { Results } from './components/Results';
 import { History } from './components/History';
+import { ShareModal } from './components/Share';
 
 export default function Home() {
   const [code, setCode] = useState('');
@@ -17,6 +18,7 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(true);
   const [pageLoaded, setPageLoaded] = useState(false);
   const [keyboardHint, setKeyboardHint] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // Animate page load
   useEffect(() => {
@@ -163,6 +165,16 @@ export default function Home() {
                   <span className="keyboard-hint">Press to analyze</span>
                 )}
               </div>
+
+              {code.trim() && (
+                <button
+                  className="share-btn"
+                  onClick={() => setShowShareModal(true)}
+                >
+                  <span className="btn-icon">🔒</span>
+                  <span className="btn-text">Share Encrypted</span>
+                </button>
+              )}
             </div>
 
             <div onKeyDown={handleKeyDown}>
@@ -200,6 +212,13 @@ export default function Home() {
       <footer className="footer">
         <p>🔍 Powered by BugHunter - Static Code Analysis Engine</p>
       </footer>
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        code={code}
+        language={language}
+      />
 
       <style jsx>{`
         .page {
@@ -462,6 +481,26 @@ export default function Home() {
           gap: 16px;
           margin-bottom: 20px;
           flex-wrap: wrap;
+        }
+
+        .share-btn {
+          background: linear-gradient(135deg, #00aaff, #0066cc);
+          color: #ffffff;
+          border: none;
+          padding: 16px 24px;
+          border-radius: 12px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 170, 255, 0.3);
         }
 
         .analyze-btn {

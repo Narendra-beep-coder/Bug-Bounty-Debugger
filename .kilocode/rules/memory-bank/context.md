@@ -18,6 +18,7 @@ BugHunter is a fully functional multi-language bug detector that can find bugs, 
 - [x] Multi-language code analysis engine
 - [x] Interactive frontend interface
 - [x] API endpoints for code analysis and history
+- [x] Secure code sharing with encryption (AES-256-GCM)
 
 ## Current Structure
 
@@ -31,6 +32,9 @@ BugHunter is a fully functional multi-language bug detector that can find bugs, 
 | `src/lib/types.ts` | TypeScript interfaces | ✅ Complete |
 | `src/app/api/analyze/` | Code analysis API endpoint | ✅ Complete |
 | `src/app/api/history/` | Analysis history API | ✅ Complete |
+| `src/app/api/share/` | Secure code sharing API | ✅ Complete |
+| `src/lib/encryption.ts` | AES-256-GCM encryption utilities | ✅ Complete |
+| `src/app/components/Share.tsx` | Share modal component | ✅ Complete |
 | `SPEC.md` | Technical specification | ✅ Complete |
 
 ## Supported Languages
@@ -56,6 +60,25 @@ The bug bounty debugger supports analyzing code in:
 5. **History**: MongoDB-backed analysis history
 6. **Interactive UI**: Dark theme with neon accents, animations
 
+## New Feature: Secure Code Sharing (v2.1)
+
+### Encryption
+- Uses AES-256-GCM encryption for secure code sharing
+- Generates unique encryption keys for each share
+- Client-side encryption using Web Crypto API
+
+### Email Delivery
+- Nodemailer integration for sending encrypted code
+- HTML email templates with decryption instructions
+- Simulation mode when no email credentials configured
+
+### Share Flow
+1. User enters recipient email, optional name and message
+2. Code is encrypted client-side with AES-256-GCM
+3. Email sent with encrypted code and instructions
+4. Decryption key displayed for user to share separately
+5. Recipient uses key to decrypt code in BugHunter
+
 ## Session History
 
 | Date | Changes |
@@ -64,7 +87,7 @@ The bug bounty debugger supports analyzing code in:
 | 2026-02-17 | Implemented BugHunter - full multi-language bug detector |
 | 2026-02-17 | Fixed MongoDB stability - app now works without MongoDB |
 | 2026-02-19 | Enhanced interface with animations, line numbers, animated counters, better history |
-| 2026-02-19 | Enhanced interface with animations, line numbers, animated counters, better history |
+| 2026-02-19 | Added secure code sharing with email encryption |
 
 ## To Run
 
