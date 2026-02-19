@@ -89,6 +89,7 @@ The bug bounty debugger supports analyzing code in:
 | 2026-02-19 | Enhanced interface with animations, line numbers, animated counters, better history |
 | 2026-02-19 | Added secure code sharing with email encryption |
 | 2026-02-19 | Fixed proxy error - configured dev server to run on port 8080 |
+| 2026-02-19 | Added MongoDB binaries to gitignore |
 
 ## To Run
 
