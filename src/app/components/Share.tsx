@@ -26,10 +26,20 @@ export function ShareModal({ isOpen, onClose, code, language }: ShareModalProps)
       return;
     }
 
+    if (!code.trim()) {
+      setError('No code to share');
+      return;
+    }
+
     setIsEncrypting(true);
     setError('');
 
     try {
+      // Check if Web Crypto API is available
+      if (!window.crypto || !window.crypto.subtle) {
+        throw new Error('Web Crypto API is not available. Please use HTTPS or localhost.');
+      }
+
       // Generate encryption key
       const key = await generateKey();
       const keyString = await exportKey(key);
@@ -55,16 +65,25 @@ export function ShareModal({ isOpen, onClose, code, language }: ShareModalProps)
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+      }
+
       const data = await response.json();
 
       if (data.success) {
         setSent(true);
+        // If in simulation mode, show a message
+        if (data.message && data.message.includes('simulation')) {
+          console.log('Share simulation mode:', data.preview);
+        }
       } else {
         setError(data.error || 'Failed to send email');
       }
     } catch (err) {
       console.error('Share error:', err);
-      setError('Failed to encrypt and send code');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to encrypt and send code';
+      setError(errorMessage);
     } finally {
       setIsSending(false);
     }

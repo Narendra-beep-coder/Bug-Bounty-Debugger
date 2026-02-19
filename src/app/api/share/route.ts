@@ -148,7 +148,7 @@ Powered by BugHunter - Multi-Language Bug Detector
     // For demo purposes, if no email credentials are configured
     // We'll simulate sending and return success
     if (!EMAIL_USER || !EMAIL_PASS) {
-      console.log('Email would be sent:', {
+      console.log('Email would be sent (simulation mode):', {
         to: toEmail,
         subject: mailOptions.subject,
         key: decryptionKey,
@@ -158,11 +158,16 @@ Powered by BugHunter - Multi-Language Bug Detector
       
       return NextResponse.json({
         success: true,
-        message: 'Email simulation mode - no credentials configured',
+        message: 'Email simulation mode - no email credentials configured. Configure EMAIL_HOST, EMAIL_USER, and EMAIL_PASS in .env.local to send real emails.',
+        simulation: true,
         preview: {
           to: toEmail,
           decryptionKey: decryptionKey,
           language: language,
+          encryptedCode: {
+            iv: encryptedCode.iv,
+            encryptedData: encryptedCode.encryptedData.substring(0, 50) + '...',
+          },
         },
       });
     }
