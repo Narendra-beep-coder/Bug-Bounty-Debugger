@@ -63,9 +63,75 @@ The bug bounty debugger supports analyzing code in:
 | Initial | Template created with base setup |
 | 2026-02-17 | Implemented BugHunter - full multi-language bug detector |
 | 2026-02-17 | Fixed MongoDB stability - app now works without MongoDB |
+| 2026-02-19 | Enhanced interface with animations, line numbers, animated counters, better history |
+| 2026-02-19 | Enhanced interface with animations, line numbers, animated counters, better history |
 
 ## To Run
 
 1. Run `bun next dev` to start the development server
 2. Open http://localhost:3000
 3. MongoDB is optional - app works without it (history won't persist)
+
+## New UI Enhancements (v2.0)
+
+The interface has been enhanced with the following interactivity features:
+
+### Code Editor
+- Line numbers with synchronized scrolling
+- Language-specific file icons with colors
+- Window-style UI with macOS dots (red/yellow/green)
+- Paste and Copy buttons
+- Character, line, and word count
+- Focus states with glowing borders
+
+### Results Section
+- Animated number counters that count up when results appear
+- Clickable filter tabs for Critical/Warning/Info
+- Pulse indicators for severity cards
+- Staggered animation for bug cards
+- Success state with ripple animation
+
+### Bug Cards
+- Expandable cards with click to reveal more details
+- Copy code snippet functionality
+- Hover glow effects following mouse position
+- Severity badges with icons
+- Smooth expand/collapse transitions
+
+### History Panel
+- Skeleton loading states
+- Animated item appearance with staggered delays
+- Better empty and error states with retry button
+- Smooth hover effects with slide animation
+
+## New UI Enhancements (v2.0)
+
+The interface has been enhanced with the following interactivity features:
+
+### Code Editor
+- Line numbers with synchronized scrolling
+- Language-specific file icons with colors
+- Window-style UI with macOS dots (red/yellow/green)
+- Paste and Copy buttons
+- Character, line, and word count
+- Focus states with glowing borders
+
+### Results Section
+- Animated number counters that count up when results appear
+- Clickable filter tabs for Critical/Warning/Info
+- Pulse indicators for severity cards
+- Staggered animation for bug cards
+- Success state with ripple animation
+
+### Bug Cards
+- Expandable cards with click to reveal more details
+- Copy code snippet functionality
+- Hover glow effects following mouse position
+- Severity badges with icons
+- Smooth expand/collapse transitions
+
+### History Panel
+- Skeleton loading states
+- Animated item appearance with staggered delays
+- Better empty and error states with retry button
+- Smooth hover effects with slide animation
