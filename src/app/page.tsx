@@ -19,6 +19,19 @@ export default function Home() {
   const [pageLoaded, setPageLoaded] = useState(false);
   const [keyboardHint, setKeyboardHint] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [randomTip, setRandomTip] = useState<string>('');
+
+  // Generate random tip only on client side to avoid hydration mismatch
+  useEffect(() => {
+    const tips = [
+      "Try adding console.log statements to debug",
+      "Check for null/undefined values",
+      "Validate user input to prevent security issues",
+      "Use const instead of var for better scoping",
+      "Add error handling for better robustness",
+    ];
+    setRandomTip(tips[Math.floor(Math.random() * tips.length)]);
+  }, []);
 
   // Animate page load
   useEffect(() => {
@@ -72,17 +85,6 @@ export default function Home() {
       analyzeCode();
     }
   }, [analyzeCode]);
-
-  const getRandomTip = () => {
-    const tips = [
-      "Try adding console.log statements to debug",
-      "Check for null/undefined values",
-      "Validate user input to prevent security issues",
-      "Use const instead of var for better scoping",
-      "Add error handling for better robustness",
-    ];
-    return tips[Math.floor(Math.random() * tips.length)];
-  };
 
   return (
     <div className={`page ${pageLoaded ? 'loaded' : ''}`}>
@@ -190,10 +192,10 @@ export default function Home() {
               <Results bugs={bugs} summary={summary} />
             )}
 
-            {!hasAnalyzed && !isAnalyzing && code.trim() === '' && (
+            {!hasAnalyzed && !isAnalyzing && code.trim() === '' && randomTip && (
               <div className="tip-container">
                 <div className="tip-icon">💡</div>
-                <p className="tip-text">{getRandomTip()}</p>
+                <p className="tip-text">{randomTip}</p>
               </div>
             )}
           </div>
