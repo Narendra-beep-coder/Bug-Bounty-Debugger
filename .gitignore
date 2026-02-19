@@ -40,3 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 mongodb-linux-x86_64-*.tgz
+mongodb.tgz
+mongodb-linux-x86_64-*/
