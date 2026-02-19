@@ -88,11 +88,12 @@ The bug bounty debugger supports analyzing code in:
 | 2026-02-17 | Fixed MongoDB stability - app now works without MongoDB |
 | 2026-02-19 | Enhanced interface with animations, line numbers, animated counters, better history |
 | 2026-02-19 | Added secure code sharing with email encryption |
+| 2026-02-19 | Fixed proxy error - configured dev server to run on port 8080 |
 
 ## To Run
 
-1. Run `bun next dev` to start the development server
-2. Open http://localhost:3000
+1. Run `bun dev` to start the development server
+2. Open http://localhost:8080
 3. MongoDB is optional - app works without it (history won't persist)
 
 ## New UI Enhancements (v2.0)
